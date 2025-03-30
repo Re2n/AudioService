@@ -1,0 +1,24 @@
+services:
+  database:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - backend
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - database-pg:/var/lib/postgresql/data
+    env_file:
+      - "app/.env"
+
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  database-pg:
