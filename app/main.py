@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from api.v1.AudioFile import audio_file_router
 from api.v1.Token import token_router
 from api.v1.User import user_router
 from core.config.Database import db
@@ -20,3 +21,4 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(user_router)
 app.include_router(token_router)
+app.include_router(audio_file_router)
