@@ -18,7 +18,7 @@ class EnvironmentSettings(BaseSettings):
     DB_PORT: str
     YANDEX_CLIENT_ID: str
     YANDEX_CLIENT_SECRET: str
-    # APP_PORT: int
+    APP_PORT: int
 
     class Config:
         env_file = get_env_filename()

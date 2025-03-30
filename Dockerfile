@@ -3,11 +3,12 @@ FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV PIP_ROOT_USER_ACTION=ignore
+ENV PYTHONPATH=/app
 
-WORKDIR /AudioService
+RUN apt-get update && apt-get install -y libmagic1 && rm -rf /var/lib/apt/lists/*
 
-COPY ./requirements.txt /code/requirements.txt
-
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+WORKDIR /app
 
 COPY . .
+
+RUN pip install -r requirements.txt

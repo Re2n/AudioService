@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import RedirectResponse
 
 from core.auth.YandexAuth import get_yandex_user
-from core.config.Database import db
+from core.config.Database import db, env
 from models.User import User, UserResponse, UserUpdate
 from repositories.User import UserRepository
 from services.Auth import AuthService
@@ -92,5 +92,5 @@ async def delete_user(
 @user_router.get("/auth/redirect_to_auth_url/")
 async def redirect_url():
     return RedirectResponse(
-        "https://oauth.yandex.ru/authorize?response_type=code&client_id=1"
+        f"https://oauth.yandex.ru/authorize?response_type=code&client_id={env.YANDEX_CLIENT_ID}"
     )
