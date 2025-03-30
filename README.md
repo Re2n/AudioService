@@ -11,4 +11,4 @@
 
 [Документация](http://localhost:5466/docs#)
 
-[Для авторизации перейте по ссылке](http://localhost:5466/auth/redirect_to_auth_url)
+[Для авторизации перейти по ссылке](http://localhost:5466/auth/redirect_to_auth_url)
