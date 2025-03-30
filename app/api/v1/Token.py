@@ -8,16 +8,16 @@ auth_service = AuthService(UserRepository())
 
 token_router = APIRouter(tags=["Token"])
 
-# @token_router.get('/get_new_token/')
-# async def get_new_token(
-#         payload: dict = Depends(auth_service.get_current_auth_user)
-# ):
-#     yandex_id = payload.get('sub')
-#     jwt_payload = {
-#         "sub": yandex_id,
-#         "email": payload.get("email"),
-#         "is_superuser": payload.get("is_superuser"),
-#         "yandex_id": yandex_id,
-#     }
-#     token = JWT.encode_jwt(jwt_payload)
-#     return {"access_token": token, "token_type": "Bearer"}
+@token_router.get('/get_new_token/')
+async def get_new_token(
+        payload: dict = Depends(auth_service.get_current_token_payload)
+):
+    yandex_id = int(payload.get('sub'))
+    jwt_payload = {
+        "sub": str(yandex_id),
+        "email": payload.get("email"),
+        "is_superuser": payload.get("is_superuser"),
+        "yandex_id": yandex_id,
+    }
+    token = await JWT.encode_jwt(jwt_payload)
+    return {"access_token": token, "token_type": "Bearer"}

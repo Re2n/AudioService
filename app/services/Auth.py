@@ -5,7 +5,6 @@ from fastapi.security import (
 )
 from sqlalchemy.ext.asyncio import AsyncSession
 from jwt.exceptions import InvalidTokenError
-from models.User import UserResponse
 from repositories.User import UserRepository
 from core.auth import JWT
 
@@ -31,18 +30,3 @@ class AuthService:
                 detail=f"Token invalid",
             )
         return payload
-
-    async def get_current_auth_user(
-        self,
-        session: AsyncSession,
-        payload: dict = Depends(get_current_token_payload),
-    ) -> UserResponse:
-        yandex_id = payload.get("sub")
-        res = await self.repository.get_by_yandex_id(session, yandex_id)
-        if res is not None:
-            return UserResponse(id=res.id, email=res.email)
-
-        raise HTTPException(
-            status_code=401,
-            detail="Token invalid",
-        )

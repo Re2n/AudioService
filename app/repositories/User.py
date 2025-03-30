@@ -2,6 +2,7 @@ from pydantic import EmailStr
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from models.User import UserUpdate
 from schemas.User import User
 
 
@@ -35,3 +36,21 @@ class UserRepository:
         stmt = select(self.model).where(self.model.yandex_id == yandex_id)
         res = await session.execute(stmt)
         return res.scalar_one_or_none()
+
+    async def get_by_user_id(self, session: AsyncSession, user_id: int):
+        stmt = select(self.model).where(self.model.id == user_id)
+        res = await session.execute(stmt)
+        return res.scalar_one_or_none()
+
+    async def update(self, session: AsyncSession, user_id: int, user_update: UserUpdate):
+        user = await self.get_by_user_id(session, user_id)
+        if user is None:
+            return user
+
+        user_dict = user_update.model_dump(exclude_unset=True, exclude_none=True)
+        for field, value in user_dict.items():
+            setattr(user, field, value)
+
+        session.add(user)
+        await session.commit()
+        return user
