@@ -7,7 +7,9 @@ class AudioFileService:
     def __init__(self, repository: AudioFileRepository):
         self.repository = repository
 
-    async def create(self, session: AsyncSession, owner_id: int, filename: str, filepath: str):
+    async def create(
+        self, session: AsyncSession, owner_id: int, filename: str, filepath: str
+    ):
         audio_file = await self.repository.create(session, owner_id, filename, filepath)
         return audio_file
 

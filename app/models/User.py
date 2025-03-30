@@ -6,8 +6,10 @@ class User(BaseModel):
     is_superuser: bool = False
     yandex_id: int
 
+
 class UserResponse(User):
     id: int
+
 
 class UserUpdate(BaseModel):
     email: str | None = None

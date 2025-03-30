@@ -42,7 +42,9 @@ class UserRepository:
         res = await session.execute(stmt)
         return res.scalar_one_or_none()
 
-    async def update(self, session: AsyncSession, user_id: int, user_update: UserUpdate):
+    async def update(
+        self, session: AsyncSession, user_id: int, user_update: UserUpdate
+    ):
         user = await self.get_by_user_id(session, user_id)
         if user is None:
             return user

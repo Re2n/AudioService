@@ -40,7 +40,12 @@ class AuthService:
         yandex_id = int(payload.get("sub"))
         res = await self.repository.get_by_yandex_id(session, yandex_id)
         if res is not None:
-            return UserResponse(id=res.id, email=res.email, is_superuser=res.is_superuser, yandex_id=res.yandex_id)
+            return UserResponse(
+                id=res.id,
+                email=res.email,
+                is_superuser=res.is_superuser,
+                yandex_id=res.yandex_id,
+            )
 
         raise HTTPException(
             status_code=401,

@@ -13,7 +13,7 @@ from services.Auth import AuthService
 from services.User import UserService
 from core.auth import JWT
 
-user_router = APIRouter(tags=["User"])
+user_router = APIRouter(prefix="/api/v1", tags=["User"])
 user_service = UserService(UserRepository())
 auth_service = AuthService(UserRepository())
 
@@ -42,35 +42,48 @@ async def login_via_yandex(
     token = await JWT.encode_jwt(jwt_payload)
     return {"access_token": token, "token_type": "Bearer"}
 
+
 @user_router.get("/get_user/{user_id}")
-async def get_user(user_id: int,
-                   session: Annotated[AsyncSession, Depends(db.session_getter)],
-                    payload: dict = Depends(auth_service.get_current_token_payload)
+async def get_user(
+    user_id: int,
+    session: Annotated[AsyncSession, Depends(db.session_getter)],
+    payload: dict = Depends(auth_service.get_current_token_payload),
 ):
     is_superuser = payload.get("is_superuser")
     if is_superuser:
         user = await user_service.get_by_user_id(session, user_id)
-        return UserResponse(id=user.id, email=user.email, is_superuser=user.is_superuser, yandex_id=user.yandex_id)
+        return UserResponse(
+            id=user.id,
+            email=user.email,
+            is_superuser=user.is_superuser,
+            yandex_id=user.yandex_id,
+        )
     raise HTTPException(
         status_code=403,
         detail="Error access denied",
     )
 
+
 @user_router.patch("/update_user/{user_id}")
-async def update_user(user_id: int,
-                      user_update: UserUpdate,
-                      session: Annotated[AsyncSession, Depends(db.session_getter)],
-                      payload: dict = Depends(auth_service.get_current_token_payload)
+async def update_user(
+    user_id: int,
+    user_update: UserUpdate,
+    session: Annotated[AsyncSession, Depends(db.session_getter)],
+    payload: dict = Depends(auth_service.get_current_token_payload),
 ):
     is_superuser = payload.get("is_superuser")
     if is_superuser:
         user = await user_service.update(session, user_id, user_update)
-        return UserResponse(id=user.id, email=user.email, is_superuser=user.is_superuser, yandex_id=user.yandex_id)
+        return UserResponse(
+            id=user.id,
+            email=user.email,
+            is_superuser=user.is_superuser,
+            yandex_id=user.yandex_id,
+        )
     raise HTTPException(
         status_code=403,
         detail="Error access denied",
     )
-
 
 
 @user_router.delete("/delete_user/{user_id}/")
@@ -82,7 +95,12 @@ async def delete_user(
     is_superuser = payload.get("is_superuser")
     if is_superuser:
         user = await user_service.delete_user(session, user_id)
-        return UserResponse(id=user.id, email=user.email, is_superuser=user.is_superuser, yandex_id=user.yandex_id)
+        return UserResponse(
+            id=user.id,
+            email=user.email,
+            is_superuser=user.is_superuser,
+            yandex_id=user.yandex_id,
+        )
     raise HTTPException(
         status_code=403,
         detail="Error access denied",

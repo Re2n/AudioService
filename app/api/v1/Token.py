@@ -6,13 +6,14 @@ from core.auth import JWT
 
 auth_service = AuthService(UserRepository())
 
-token_router = APIRouter(tags=["Token"])
+token_router = APIRouter(prefix="/api/v1", tags=["Token"])
 
-@token_router.get('/get_new_token/')
+
+@token_router.get("/get_new_token/")
 async def get_new_token(
-        payload: dict = Depends(auth_service.get_current_token_payload)
+    payload: dict = Depends(auth_service.get_current_token_payload),
 ):
-    yandex_id = int(payload.get('sub'))
+    yandex_id = int(payload.get("sub"))
     jwt_payload = {
         "sub": str(yandex_id),
         "email": payload.get("email"),

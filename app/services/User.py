@@ -32,7 +32,9 @@ class UserService:
             raise HTTPException(status_code=404, detail="User not found")
         return user
 
-    async def update(self, session: AsyncSession, user_id: int, user_update: UserUpdate):
+    async def update(
+        self, session: AsyncSession, user_id: int, user_update: UserUpdate
+    ):
         user = await self.repository.update(session, user_id, user_update)
         if user is None:
             raise HTTPException(status_code=404, detail="User not found")
